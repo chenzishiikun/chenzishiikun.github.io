@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机窗口生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .message-window {
+            position: fixed;
+            width: 250px;
+            min-height: 100px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: white;
+            z-index: 1000;
+            cursor: move;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(0,0,0,0.5);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 页面加载后自动开始
+        window.addEventListener('load', function() {
+            const sentences = [
+                "人生就像一盒巧克力，你永远不知道下一颗是什么味道。",
+                "代码写得好，bug远离我。",
+                "学习编程是打开未来世界大门的钥匙。",
+                "每一个伟大的梦想都有一个开始。",
+                "坚持不懈是成功的关键。",
+                "今天是你余生中最年轻的一天。",
+                "创新就是把复杂的事情变得简单。",
+                "耐心是智慧的伙伴。",
+                "机会总是留给有准备的人。",
+                "行动胜过千言万语。"
+            ];
+
+            let currentIndex = 0;
+            let windowCount = 0;
+            const intervalMs = 100;
+
+            function generateRandomColor() {
+                const r = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+                const g = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+                const b = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+                return `#${r}${g}${b}`;
+            }
+
+            function chooseTextColor(backgroundColor) {
+                const r = parseInt(backgroundColor.substring(1, 3), 16);
+                const g = parseInt(backgroundColor.substring(3, 5), 16);
+                const b = parseInt(backgroundColor.substring(5, 7), 16);
+                const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                return brightness < 128 ? 'white' : 'black';
+            }
+
+            function getRandomPosition() {
+                const windowWidth = 250;
+                const windowHeight = 100;
+                const maxX = window.innerWidth - windowWidth - 20;
+                const maxY = window.innerHeight - windowHeight - 20;
+                const x = Math.max(10, Math.floor(Math.random() * maxX));
+                const y = Math.max(10, Math.floor(Math.random() * maxY));
+                return { x, y };
+            }
+
+            function createWindow() {
+                if (currentIndex >= sentences.length) {
+                    currentIndex = 0;
+                }
+
+                const sentence = sentences[currentIndex];
+                const bgColor = generateRandomColor();
+                const textColor = chooseTextColor(bgColor);
+                const position = getRandomPosition();
+
+                const windowElement = document.createElement('div');
+                windowElement.className = 'message-window';
+                windowElement.style.backgroundColor = bgColor;
+                windowElement.style.color = textColor;
+                windowElement.style.left = `${position.x}px`;
+                windowElement.style.top = `${position.y}px`;
+
+                windowElement.innerHTML = `
+                    <button class="close-btn" onclick="this.parentElement.remove()">×</button>
+                    <div style="padding: 10px; word-break: break-word;">${sentence}</div>
+                `;
+
+                // 添加拖拽功能
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                windowElement.onmousedown = dragMouseDown;
+
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                }
+
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    windowElement.style.top = (windowElement.offsetTop - pos2) + "px";
+                    windowElement.style.left = (windowElement.offsetLeft - pos1) + "px";
+                }
+
+                function closeDragElement() {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+
+                document.body.appendChild(windowElement);
+                windowCount++;
+                currentIndex++;
+            }
+
+            // 延迟1秒后开始生成，模拟Python代码的after(1000)
+            setTimeout(() => {
+                // 每100ms生成一个窗口，与Python代码interval_ms=100一致
+                setInterval(createWindow, intervalMs);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
