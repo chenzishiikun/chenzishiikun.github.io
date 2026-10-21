@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f4f4" />
+    <meta name="description" content="校园汇——连接同校同学的校园生活服务平台。发现校园动态、互助跑腿、二手好物与校园通知。" />
+    <meta name="keywords" content="校园汇,校园生活,校园跑腿,校园二手,校园社区" />
+    <title>校园汇 — 校园生活，一起汇</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./content.js" defer></script>
+    <script src="./api.js" defer></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <div class="app-frame">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#/home" aria-label="校园汇首页">
+          <span class="brand-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>校园汇<span class="brand-period">.</span></span>
+        </a>
+        <button class="nav-collapse-button" type="button" data-action="toggle-nav" aria-label="折叠导航栏" aria-controls="sidebar" aria-expanded="true"><span aria-hidden="true">‹</span></button>
+        <button class="campus-switcher" type="button" data-action="campus-switch">
+          <span class="campus-avatar">示</span><span class="campus-name"><strong>示例大学</strong><small><i></i> 校园体验空间</small></span><span class="chevron">⌄</span>
+        </button>
+        <div class="side-label">校园服务</div>
+        <nav class="side-nav" aria-label="校园服务导航">
+          <a href="#/home" data-route="home"><span class="nav-icon">⌂</span>校园首页</a>
+          <a href="#/wall" data-route="wall"><span class="nav-icon">▧</span>校园墙<span class="nav-count" id="wall-count">4</span></a>
+          <a href="#/errands" data-route="errands"><span class="nav-icon">↗</span>校内跑腿</a>
+          <a href="#/market" data-route="market"><span class="nav-icon">◇</span>二手集市</a>
+          <a href="#/notices" data-route="notices"><span class="nav-icon">▤</span>通知公告<span class="unread-dot" id="notice-dot"></span></a>
+        </nav>
+        <div class="side-label side-label-spaced">我的校园</div>
+        <nav class="side-nav" aria-label="个人中心导航">
+          <a href="#/profile" data-route="profile"><span class="nav-icon">♙</span>个人中心</a>
+          <button type="button" class="side-link" data-action="verify"><span class="nav-icon">✓</span>身份认证<span class="side-tag">体验</span></button>
+          <button type="button" class="side-link" data-action="saved"><span class="nav-icon">♡</span>我的收藏</button>
+          <button type="button" class="side-link" data-action="toggle-tasks" aria-controls="task-rail" aria-expanded="true"><span class="nav-icon">☷</span><span data-task-toggle-label>隐藏待办栏</span></button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="help-card"><span class="help-spark">✳</span><strong>第一次来校园汇？</strong><p>看看校园服务如何让日常更简单。</p><button type="button" data-action="guide">了解一下 <span>↗</span></button></div>
+          <button class="user-mini" type="button" data-action="profile-drawer" aria-label="打开用户资料"><span class="user-avatar">林</span><span><strong>林同学</strong><small><i></i> 演示用户</small></span><span class="user-more">•••</span></button>
+        </div>
+      </aside>
+
+      <div class="mobile-backdrop" data-action="close-menu"></div>
+      <div class="task-backdrop" data-action="close-tasks" aria-hidden="true"></div>
+      <aside class="task-rail" id="task-rail" aria-label="待办任务栏" aria-hidden="true" inert>
+        <div class="task-rail-heading"><div><p class="eyebrow">YOUR CAMPUS PLAN</p><h2>待办任务</h2></div><button type="button" class="task-close" data-action="toggle-tasks" aria-label="隐藏待办栏" aria-controls="task-rail">×</button></div>
+        <div class="task-category">
+          <div class="task-category-heading"><h3>作业</h3><span>本周</span></div>
+          <div id="homework-list"></div>
+        </div>
+        <div class="task-category">
+          <div class="task-category-heading"><h3>活动</h3><span>校园日历</span></div>
+          <div id="activity-list"></div>
+        </div>
+        <p class="task-demo-note">待办仅保存在当前浏览器，可随时关闭展示。</p>
+      </aside>
+      <div class="main-column">
+        <header class="topbar">
+          <button class="mobile-menu" type="button" data-action="menu" aria-label="打开导航" aria-expanded="false"><span></span><span></span></button>
+          <button class="task-open-button" type="button" data-action="toggle-tasks" aria-controls="task-rail" aria-expanded="true"><span aria-hidden="true">☷</span><span>待办</span></button>
+          <div class="breadcrumb"><span>示例大学</span><b>/</b><strong id="current-page-name">校园首页</strong></div>
+          <label class="global-search"><span aria-hidden="true">⌕</span><input id="global-search" type="search" placeholder="搜校园动态、服务和好物" aria-label="搜索校园动态、服务和好物" /><kbd>⌘ K</kbd></label>
+          <button class="icon-button top-notice" type="button" data-route-link="notices" aria-label="查看通知"><span>♧</span><i id="top-notice-dot"></i></button>
+          <button class="top-profile" type="button" data-action="profile-drawer" aria-label="打开用户资料"><span class="user-avatar">林</span><span>林同学</span><span class="chevron">⌄</span></button>
+        </header>
+
+        <main id="main-content" tabindex="-1">
+          <div class="demo-banner"><span>✳</span><span><strong>校园体验空间</strong> 页面内容和操作均为前端演示，不代表真实学校、用户、订单或交易。</span><button type="button" aria-label="关闭提示" data-action="dismiss-banner">×</button></div>
+          <div id="view-root" aria-live="polite"></div>
+        </main>
+        <footer class="page-footer"><span>校园汇 · 让校园生活更简单</span><span>演示产品 · 暂未连接真实后端</span><a href="mailto:hello@campushui.example">意见反馈 ↗</a></footer>
+      </div>
+    </div>
+
+    <div class="profile-backdrop" data-action="close-profile" hidden></div>
+    <aside class="profile-drawer" id="profile-drawer" aria-label="用户资料" aria-hidden="true" inert>
+      <button type="button" class="profile-drawer-close" data-action="close-profile" aria-label="关闭用户资料">×</button>
+      <div class="profile-drawer-user"><span class="user-avatar" data-profile-avatar>林</span><div><strong data-profile-name>林同学</strong><small>校园演示用户</small></div></div>
+      <p class="eyebrow">CAMPUS IDENTITY</p>
+      <h2>校园资料</h2>
+      <div class="profile-school-info"><span>学校资料</span><strong data-profile-school>示例大学</strong><span>学院 / 班级</span><strong data-profile-class>设计学院 · 视觉传达 2 班</strong><span>身份状态</span><strong>演示账号，未验证真实身份</strong></div>
+      <p class="profile-drawer-note">未完成学校认证前，仅展示学校和校级资料；请勿填写真实学籍信息。</p>
+      <a class="button button-primary button-block" href="#/profile" data-action="close-profile">个人资料与设置</a>
+    </aside>
+
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <dialog class="app-dialog" id="app-dialog" aria-labelledby="dialog-title">
+      <form method="dialog" class="dialog-close-form"><button class="dialog-close" aria-label="关闭">×</button></form>
+      <div id="dialog-content"></div>
+    </dialog>
+  </body>
+</html>
